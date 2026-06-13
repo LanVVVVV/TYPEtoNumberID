@@ -8,6 +8,8 @@ public static class ModEntry
 
     public static void Load()
     {
+        GlobalCharacterData.Initialize();
+
         Log("TYPEtoNumberID Mod loaded!");
     }
 

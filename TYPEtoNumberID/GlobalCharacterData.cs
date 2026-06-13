@@ -1,21 +1,16 @@
-﻿using HarmonyLib;
-using MBMScripts;
+﻿using MBMScripts;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace TYPEtoNumberID;
 
-
-[HarmonyPatch(typeof(GameManager))]
 public static class GlobalCharacterData
 {
     public static Dictionary<string, List<int>> AllPartTypes = new Dictionary<string, List<int>>();
 
-    [HarmonyPatch(nameof(GameManager.Initialize))]
-    [HarmonyPostfix]
-    public static void InitializePostfix()
+    public static void Initialize()
     {
-        Initialize();
+        InitializeData();
         EarHair3Add();
         //DebugPrintAllPartTypes();
     }
@@ -27,7 +22,7 @@ public static class GlobalCharacterData
         AllPartTypes["EarHair"].Sort();
     }
 
-    public static void Initialize()
+    private static void InitializeData()
     {
         //InitializeCheck();
 
@@ -55,7 +50,7 @@ public static class GlobalCharacterData
         //Add("Beard", allData.SelectMany(d => d.BeardTypeList ?? Enumerable.Empty<int>()));
     }
 
-    public static List<CharacterData> GetAllFemaleData()
+    private static List<CharacterData> GetAllFemaleData()
     {
         var allData = new List<CharacterData>();
         allData.Add(GameManager.HumanData);
@@ -69,29 +64,29 @@ public static class GlobalCharacterData
         return allData;
     }
 
-    private static void InitializeCheck()
-    {
-        ModEntry.Log("=== GlobalCharacterData.Initialize START ===");
+    //private static void InitializeCheck()
+    //{
+    //    ModEntry.Log("=== GlobalCharacterData.Initialize START ===");
 
-        void Check(string name, CharacterData data)
-        {
-            if (data == null)
-                ModEntry.Log($"[TNID] {name} = NULL");
-            else
-                ModEntry.Log($"[TNID] {name} = OK)");
-        }
+    //    void Check(string name, CharacterData data)
+    //    {
+    //        if (data == null)
+    //            ModEntry.Log($"[TNID] {name} = NULL");
+    //        else
+    //            ModEntry.Log($"[TNID] {name} = OK)");
+    //    }
 
-        Check("HumanData", GameManager.HumanData);
-        Check("ElfData", GameManager.ElfData);
-        Check("DwarfData", GameManager.DwarfData);
-        Check("NekoData", GameManager.NekoData);
-        Check("InuData", GameManager.InuData);
-        Check("UsagiData", GameManager.UsagiData);
-        Check("HitsujiData", GameManager.HitsujiData);
-        Check("DragonianData", GameManager.DragonianData);
+    //    Check("HumanData", GameManager.HumanData);
+    //    Check("ElfData", GameManager.ElfData);
+    //    Check("DwarfData", GameManager.DwarfData);
+    //    Check("NekoData", GameManager.NekoData);
+    //    Check("InuData", GameManager.InuData);
+    //    Check("UsagiData", GameManager.UsagiData);
+    //    Check("HitsujiData", GameManager.HitsujiData);
+    //    Check("DragonianData", GameManager.DragonianData);
 
-        ModEntry.Log("=== GlobalCharacterData.Initialize END ===");
-    }
+    //    ModEntry.Log("=== GlobalCharacterData.Initialize END ===");
+    //}
 
     private static void Add(string key, IEnumerable<int> seq)
     {
@@ -102,11 +97,11 @@ public static class GlobalCharacterData
             .ToList();
     }
 
-    public static void DebugPrintAllPartTypes()
-    {
-        foreach (var kv in AllPartTypes)
-        {
-            ModEntry.Log($"[CharacterData] {kv.Key} = [{string.Join(", ", kv.Value)}]");
-        }
-    }
+    //public static void DebugPrintAllPartTypes()
+    //{
+    //    foreach (var kv in AllPartTypes)
+    //    {
+    //        ModEntry.Log($"[CharacterData] {kv.Key} = [{string.Join(", ", kv.Value)}]");
+    //    }
+    //}
 }
