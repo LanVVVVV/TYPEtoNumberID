@@ -155,6 +155,8 @@ public class CharacterPatch
     [HarmonyPrefix]
     public static bool ChangeTitsLeftInAllPrefix(Character __instance)
     {
+        if (ModEntry.IsTitsModLoaded)
+            return false;
         var list = GlobalCharacterData.AllPartTypes["Tits"];
         int t = __instance.TitsType;
 
@@ -180,6 +182,8 @@ public class CharacterPatch
     [HarmonyPrefix]
     public static bool ChangeTitsRightInAllPrefix(Character __instance)
     {
+        if (ModEntry.IsTitsModLoaded)
+            return false;
         var list = GlobalCharacterData.AllPartTypes["Tits"];
         int t = __instance.TitsType;
 

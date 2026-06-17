@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace TYPEtoNumberID;
 
-
 [HarmonyPatch(typeof(GameManager))]
 public static class GlobalCharacterData
 {
@@ -15,8 +14,12 @@ public static class GlobalCharacterData
     [HarmonyPostfix]
     public static void InitializePostfix()
     {
+        //InitializeCheck();
+
         Initialize();
         EarHair3Add();
+        CleanZeroParts();
+
         //DebugPrintAllPartTypes();
     }
 
@@ -27,10 +30,24 @@ public static class GlobalCharacterData
         AllPartTypes["EarHair"].Sort();
     }
 
+    private static void CleanZeroParts()
+    {
+        RemoveZero("Horn");
+        RemoveZero("HornDragon");
+        RemoveZero("Tail");
+        RemoveZero("TailDragon");
+    }
+
+    private static void RemoveZero(string key)
+    {
+        if (!AllPartTypes.ContainsKey(key)) return;
+        if (!AllPartTypes[key].Contains(0)) return;
+
+        AllPartTypes[key].RemoveAll(x => x == 0);
+    }
+
     public static void Initialize()
     {
-        //InitializeCheck();
-
         List<CharacterData> allData = GetAllFemaleData();
 
         Add("HairFront", allData.SelectMany(d => d.HairFrontTypeList ?? Enumerable.Empty<int>()));
@@ -69,6 +86,15 @@ public static class GlobalCharacterData
         return allData;
     }
 
+    private static void Add(string key, IEnumerable<int> seq)
+    {
+        AllPartTypes[key] = seq
+            .Where(x => x >= 0)
+            .Distinct()
+            .OrderBy(x => x)
+            .ToList();
+    }
+
     private static void InitializeCheck()
     {
         ModEntry.Log("=== GlobalCharacterData.Initialize START ===");
@@ -91,15 +117,6 @@ public static class GlobalCharacterData
         Check("DragonianData", GameManager.DragonianData);
 
         ModEntry.Log("=== GlobalCharacterData.Initialize END ===");
-    }
-
-    private static void Add(string key, IEnumerable<int> seq)
-    {
-        AllPartTypes[key] = seq
-            .Where(x => x >= 0)
-            .Distinct()
-            .OrderBy(x => x)
-            .ToList();
     }
 
     public static void DebugPrintAllPartTypes()

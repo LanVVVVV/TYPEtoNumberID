@@ -13,3 +13,7 @@ TYPEtoNumberID is a mod for **Monster Black Market** —— aimed at expanding t
 | -------------------- | ------- |
 | MBM.ModLoader        | latest  |
 | Monster Black Market | latest  |
+
+### Compatibility
+
+- ✅ **TitsMod** — prevent duplicate Tits switching in gallery.
